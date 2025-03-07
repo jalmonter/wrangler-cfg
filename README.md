@@ -5,6 +5,8 @@
 
 `wrangler-cfg` is a CLI tool that migrates Cloudflare Workers [configuration files](https://developers.cloudflare.com/workers/wrangler/configuration/) from TOML to JSONC.
 
+⚠️ Ensure your project uses `wrangler` version [`3.91.0`](https://developers.cloudflare.com/workers/wrangler/configuration/#:~:text=As%20of%20Wrangler%20v3.91.0%20Wrangler%20supports%20both%20JSON%20(wrangler.json%20or%20wrangler.jsonc)%20and%20TOML%20(wrangler.toml)%20for%20its%20configuration%20file.) or later. ⚠️
+
 # Quick Start Guide
 
 Follow these steps to migrate your configuration to JSONC:
