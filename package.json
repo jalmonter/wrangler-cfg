@@ -1,7 +1,7 @@
 {
   "name": "wrangler-cfg",
   "version": "1.0.0",
-  "description": "Migrate your Wrangler configuration from TOML to JSONC syntax.",
+  "description": "Migrate your Wrangler configuration from TOML to JSON[C] syntax.",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -18,7 +18,11 @@
     "json",
     "jsonc"
   ],
-  "author": "Johnny Almonte",
+  "author": "jalmonter (https://github.com/jalmonter)",
+  "homepage": "https://github.com/jalmonter/wrangler-cfg#readme",
+  "bugs": {
+    "url": "https://github.com/jalmonter/wrangler-cfg/issues"
+  },
   "license": "MIT",
   "bin": {
     "wrangler-cfg": "./dist/index.js"
