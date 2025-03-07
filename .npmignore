@@ -11,3 +11,6 @@ package-lock.json
 
 # Ignore test and build artifacts if not needed
 node_modules/
+
+# Ignore .github directory
+.github/
