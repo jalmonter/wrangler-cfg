@@ -1,0 +1,34 @@
+{
+  "name": "wrangler-cfg",
+  "version": "1.0.0",
+  "description": "Migrate your Wrangler configuration from TOML to JSONC syntax.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/index.js"
+  },
+  "keywords": [
+    "wrangler",
+    "cloudflare",
+    "workers",
+    "config",
+    "migrate",
+    "toml",
+    "json",
+    "jsonc"
+  ],
+  "author": "Johnny Almonte",
+  "license": "MIT",
+  "bin": {
+    "wrangler-cfg": "./dist/index.js"
+  },
+  "dependencies": {
+    "wrangler": "^3.114.0",
+    "yargs": "^17.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "@types/yargs": "^17.0.33",
+    "typescript": "^5.0.0"
+  }
+}

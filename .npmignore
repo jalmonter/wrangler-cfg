@@ -1,0 +1,13 @@
+# Ignore source files
+src/
+tsconfig.json
+
+# Ignore Git and documentation files
+.gitignore
+README.md
+
+# Ignore lock files (optional)
+package-lock.json
+
+# Ignore test and build artifacts if not needed
+node_modules/
