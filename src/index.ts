@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { writeFileSync } from "fs";
-import { join } from "path";
+import { join, parse } from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { experimental_readRawConfig, Unstable_RawConfig } from "wrangler";
@@ -22,37 +22,52 @@ const generateBanner = (name: string, homepage: string): string =>
 
 type JSONConfig = Unstable_RawConfig & { $schema: string };
 
+const formatOutput = (
+  to: string,
+  jsonConfig: JSONConfig,
+  fileContent: string
+): string => {
+  return to === "jsonc" ? fileContent : JSON.stringify(jsonConfig, null, 2);
+};
+
 const migrateCommand = {
   command: "migrate",
   describe: description,
   builder: (yargs: yargs.Argv) => {
     return yargs
+      .option("file", {
+        alias: "f",
+        describe:
+          "Target wrangler file name",
+        type: "string",
+        default: "wrangler",
+      })
       .option("to", {
         alias: "t",
         describe: "Target file format",
         choices: ["json", "jsonc"],
-        demandOption: true,
+        default: "jsonc",
       })
       .option("save", {
         alias: "s",
         describe: "Save the generated JSON[C] file",
         type: "boolean",
         default: false,
-      })
-      .option("file", {
-        alias: "f",
-        describe: "Target wrangler file",
-        default: "wrangler.toml",
       });
   },
   handler: (
     argv: yargs.Arguments<{ to: string; save: boolean; file: string }>
   ) => {
     try {
-      const configPath = join(process.cwd(), argv.file);
+      const inputFile = argv.file.endsWith(".toml")
+        ? argv.file
+        : `${argv.file}.toml`;
+      const configPath = join(process.cwd(), inputFile);
 
       if (!argv.to.includes("json")) {
-        throw new Error("The only supported target format is JSON[C]");
+        throw new Error(
+          "The only supported target formats are 'json' and 'jsonc'."
+        );
       }
 
       const { rawConfig } = experimental_readRawConfig({ config: configPath });
@@ -62,29 +77,27 @@ const migrateCommand = {
         ...rawConfig,
       };
 
-      const fileContent =
-        generateBanner(name, homepage) +
-        "\n" +
-        JSON.stringify(jsonConfig, null, 2);
+      const banner = generateBanner(name, homepage);
+      const formattedOutput = formatOutput(
+        argv.to,
+        jsonConfig,
+        `${banner}\n${JSON.stringify(jsonConfig, null, 2)}`
+      );
 
       if (argv.save) {
-        const outputPath = join(process.cwd(), `wrangler.${argv.to}`);
-        writeFileSync(
-          outputPath,
-          argv.to === "jsonc"
-            ? fileContent
-            : JSON.stringify(jsonConfig, null, 2)
+        const outputPath = join(
+          process.cwd(),
+          `${parse(inputFile).name}.${argv.to}`
         );
-        console.log(`Configuration successfully migrated to ${outputPath}`);
+        writeFileSync(outputPath, formattedOutput);
+        console.log(`✅ Configuration successfully migrated to: ${outputPath}`);
       } else {
-        console.log(
-          argv.to === "jsonc"
-            ? fileContent
-            : JSON.stringify(jsonConfig, null, 2)
-        );
+        console.log(formattedOutput);
       }
-    } catch (error: any) {
-      console.error(error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.error(`❌ Error: ${errorMessage}`);
       process.exit(1);
     }
   },
