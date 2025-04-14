@@ -36,11 +36,15 @@ const migrateCommand = {
         describe: "Save the generated JSON[C] file",
         type: "boolean",
         default: false,
+      })
+      .option("f", {
+        describe: "Target wrangler file",
+        default: "wrangler.toml",
       });
   },
-  handler: (argv: yargs.Arguments<{ to: string; save: boolean }>) => {
+  handler: (argv: yargs.Arguments<{ to: string; save: boolean, f: string }>) => {
     try {
-      const configPath = join(process.cwd(), "wrangler.toml");
+      const configPath = join(process.cwd(), argv.f);
 
       if (!argv.to.includes("json")) {
         throw new Error("The only supported target format is JSON[C]");
