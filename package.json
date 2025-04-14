@@ -1,6 +1,6 @@
 {
   "name": "wrangler-cfg",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Migrate your Wrangler configuration from TOML to JSON[C] syntax.",
   "main": "dist/index.js",
   "scripts": {
