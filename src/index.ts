@@ -28,23 +28,28 @@ const migrateCommand = {
   builder: (yargs: yargs.Argv) => {
     return yargs
       .option("to", {
+        alias: "t",
         describe: "Target file format",
         choices: ["json", "jsonc"],
         demandOption: true,
       })
       .option("save", {
+        alias: "s",
         describe: "Save the generated JSON[C] file",
         type: "boolean",
         default: false,
       })
-      .option("f", {
+      .option("file", {
+        alias: "f",
         describe: "Target wrangler file",
         default: "wrangler.toml",
       });
   },
-  handler: (argv: yargs.Arguments<{ to: string; save: boolean, f: string }>) => {
+  handler: (
+    argv: yargs.Arguments<{ to: string; save: boolean; file: string }>
+  ) => {
     try {
-      const configPath = join(process.cwd(), argv.f);
+      const configPath = join(process.cwd(), argv.file);
 
       if (!argv.to.includes("json")) {
         throw new Error("The only supported target format is JSON[C]");
